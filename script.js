@@ -1,6 +1,6 @@
 /**
  * SILENTSUITE CORE LOGIC
- * v1.0.0 Stable - Client Side Processing
+ * v2.0.0 - Hash Routing & Enhanced UI
  */
 
 // --- 1. CONFIGURATION & STATE ---
@@ -9,12 +9,13 @@ const STATE = {
     currentView: 'home'
 };
 
-// Konfigurasi Worker PDF.js (Wajib agar tidak error)
+// Konfigurasi Worker PDF.js
 if (window.pdfjsLib) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 }
 
-// --- 2. ROUTING SYSTEM (SPA) ---
+// --- 2. ROUTING SYSTEM (HASH BASED) ---
+// Solusi aman untuk GitHub Pages
 const routes = {
     '/': 'home',
     '/pdf-tools': 'pdf-tools',
@@ -36,27 +37,15 @@ const routes = {
     '/unit-converter': 'unit-converter'
 };
 
-function navigateTo(url) {
-    window.history.pushState(null, null, url);
-    handleRoute();
-}
-
 function handleRoute() {
-    let path = window.location.pathname;
+    // Ambil hash, hilangkan tanda #. Default ke '/' jika kosong
+    let path = window.location.hash.slice(1) || '/';
     
-    // Normalisasi Path untuk GitHub Pages (jika di subdirectory)
-    // Contoh: /silentsuite/pdf-merger -> /pdf-merger
-    const pathSegments = path.split('/').filter(Boolean);
-    if (pathSegments.length > 0 && !routes['/' + pathSegments[0]]) {
-        // Asumsi segmen pertama adalah nama repo, ambil segmen kedua
-        path = '/' + (pathSegments[1] || '');
-    } else if (pathSegments.length === 0) {
-        path = '/';
-    } else {
-        path = '/' + pathSegments.join('/');
+    // Handle query params jika ada (misal dari redirect 404 lama)
+    if (path.includes('?')) {
+        path = path.split('?')[0];
     }
-    
-    // Match route atau fallback ke home
+
     const viewId = routes[path] || 'home';
     
     // Transisi UI
@@ -68,45 +57,40 @@ function handleRoute() {
     const targetView = document.getElementById(viewId);
     if (targetView) {
         targetView.classList.remove('hidden');
-        // Sedikit delay agar animasi reset
-        setTimeout(() => targetView.classList.add('animate-fade-in-up'), 10);
+        // Reset scroll position
         window.scrollTo(0, 0);
+        
+        // Trigger animasi sedikit delay agar smooth
+        setTimeout(() => {
+            targetView.classList.add('animate-fade-in-up');
+        }, 10);
+        
         STATE.currentView = viewId;
     } else {
-        // Fallback total
+        // Fallback ke home jika route tidak dikenal
         document.getElementById('home').classList.remove('hidden');
     }
 
-    // Update Meta Title (Optional, bagus untuk UX)
-    document.title = `SilentSuite | ${viewId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
+    // Update Title
+    const title = viewId === 'home' ? 'Home' : viewId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    document.title = `SilentSuite | ${title}`;
     
-    // Tutup Mobile Menu
+    // Tutup Mobile Menu jika terbuka
     document.getElementById('mobile-menu').classList.add('hidden');
 }
 
 // --- 3. EVENT LISTENERS & INIT ---
 document.addEventListener('DOMContentLoaded', () => {
-    // A. Intercept Link Clicks
-    document.body.addEventListener('click', e => {
-        const link = e.target.closest('a.route-link');
-        if (link) {
-            e.preventDefault();
-            const href = link.getAttribute('href');
-            navigateTo(href);
-        }
-    });
+    // A. Routing Listeners (Hash Change)
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('load', handleRoute);
 
-    // B. Handle Browser Back/Forward
-    window.addEventListener('popstate', handleRoute);
-
-    // C. Setup Global UI Helpers
+    // B. Setup UI Helpers
     setupDragDrop();
     setupRangeSliders();
+    setupFilePreviews(); // New: Auto Preview Logic
     
-    // D. Initial Route
-    handleRoute();
-
-    // E. Register Service Worker
+    // C. Register Service Worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js')
             .then(() => console.log('[System] Service Worker Active'))
@@ -120,18 +104,87 @@ window.toggleMobileMenu = function() {
     menu.classList.toggle('hidden');
 };
 
-// Helper: Drag & Drop Visuals
+// --- 4. NEW FEATURE: AUTOMATED FILE PREVIEW ---
+function setupFilePreviews() {
+    // Mapping ID Input -> ID Container Preview
+    const previewMap = {
+        'splitInput': 'preview-split',
+        'imgToPdfInput': 'preview-img-to-pdf',
+        'pdfToImgInput': 'preview-pdf-to-img',
+        'videoInput': 'preview-video-mp3',
+        'compressVideoInput': 'preview-video-compress',
+        'imageInput': 'preview-img-compress',
+        'imgConvertInput': 'preview-img-convert',
+        'memeInput': 'preview-meme'
+    };
+
+    Object.keys(previewMap).forEach(inputId => {
+        const input = document.getElementById(inputId);
+        const container = document.getElementById(previewMap[inputId]);
+        
+        if (input && container) {
+            input.addEventListener('change', function(e) {
+                renderPreview(this.files, container);
+            });
+        }
+    });
+}
+
+function renderPreview(files, container) {
+    container.innerHTML = ''; // Clear previous
+    container.classList.remove('hidden');
+    
+    if (files.length === 0) {
+        container.classList.add('hidden');
+        return;
+    }
+
+    Array.from(files).forEach(file => {
+        const isImage = file.type.startsWith('image/');
+        const sizeFormatted = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+        
+        const item = document.createElement('div');
+        item.className = 'file-preview-item animate-fade-scale';
+        
+        let iconHtml = '';
+        if (isImage) {
+            const url = URL.createObjectURL(file);
+            iconHtml = `<img src="${url}" class="file-thumb" onload="URL.revokeObjectURL(this.src)">`;
+        } else if (file.type.includes('pdf')) {
+            iconHtml = `<div class="file-icon-placeholder text-red-500 bg-red-50 border-red-100"><i class="fa-solid fa-file-pdf"></i></div>`;
+        } else if (file.type.includes('video')) {
+            iconHtml = `<div class="file-icon-placeholder text-purple-500 bg-purple-50 border-purple-100"><i class="fa-solid fa-film"></i></div>`;
+        } else {
+            iconHtml = `<div class="file-icon-placeholder"><i class="fa-solid fa-file"></i></div>`;
+        }
+
+        item.innerHTML = `
+            <div class="file-preview-info">
+                ${iconHtml}
+                <div class="file-meta">
+                    <span class="file-name" title="${file.name}">${file.name}</span>
+                    <span class="file-size">${sizeFormatted}</span>
+                </div>
+            </div>
+            <div class="text-brand-600 text-lg">
+                <i class="fa-solid fa-check-circle"></i>
+            </div>
+        `;
+        
+        container.appendChild(item);
+    });
+}
+
+// Helper: Drag & Drop Visuals (Updated)
 function setupDragDrop() {
     const zones = document.querySelectorAll('label[class*="border-dashed"]');
     zones.forEach(zone => {
         const input = zone.querySelector('input[type="file"]');
         
-        // Prevent default browser behavior
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             zone.addEventListener(eventName, preventDefaults, false);
         });
 
-        // Highlight visual
         ['dragenter', 'dragover'].forEach(eventName => {
             zone.addEventListener(eventName, () => {
                 zone.classList.add('border-brand-500', 'bg-brand-50');
@@ -146,13 +199,11 @@ function setupDragDrop() {
             }, false);
         });
 
-        // Handle File Drop
         zone.addEventListener('drop', (e) => {
             const dt = e.dataTransfer;
             const files = dt.files;
             if (input) {
                 input.files = files;
-                // Trigger change event manual
                 const event = new Event('change', { bubbles: true });
                 input.dispatchEvent(event);
             }
@@ -179,16 +230,14 @@ function setupRangeSliders() {
 // FEATURE: PDF TOOLS
 // ==========================================
 
-// --- PDF MERGER ---
+// --- PDF MERGER (Custom Queue Logic) ---
 const mergeInput = document.getElementById('mergeInput');
 if (mergeInput) {
     mergeInput.addEventListener('change', (e) => {
-        // Append files, jangan replace
         const newFiles = Array.from(e.target.files);
         STATE.pdfMergeQueue = [...STATE.pdfMergeQueue, ...newFiles];
         renderMergeQueue();
-        // Reset input agar bisa pilih file yang sama lagi
-        e.target.value = '';
+        e.target.value = ''; // Reset allow re-select
     });
 }
 
@@ -205,18 +254,18 @@ function renderMergeQueue() {
 
     STATE.pdfMergeQueue.forEach((file, index) => {
         const div = document.createElement('div');
-        div.className = 'flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm animate-fade-in group hover:border-red-200 transition';
+        div.className = 'file-preview-item animate-fade-in group';
         div.innerHTML = `
-            <div class="flex items-center gap-3 overflow-hidden">
-                <div class="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-red-500 shrink-0">
+            <div class="file-preview-info">
+                <div class="file-icon-placeholder text-red-500 bg-red-50 border-red-100">
                     <i class="fa-solid fa-file-pdf"></i>
                 </div>
-                <div class="flex flex-col overflow-hidden">
-                    <span class="text-sm font-bold text-slate-700 truncate">${file.name}</span>
-                    <span class="text-xs text-slate-400">${(file.size / 1024 / 1024).toFixed(2)} MB</span>
+                <div class="file-meta">
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-size">${(file.size / 1024 / 1024).toFixed(2)} MB</span>
                 </div>
             </div>
-            <button onclick="removeMergeItem(${index})" class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition">
+            <button onclick="removeMergeItem(${index})" class="btn-remove-file" title="Hapus">
                 <i class="fa-solid fa-trash-can"></i>
             </button>
         `;
@@ -249,7 +298,6 @@ window.processMergePDF = async function() {
         const pdfBytes = await mergedPdf.save();
         downloadBlob(pdfBytes, "SilentSuite-Merged.pdf", "application/pdf");
         
-        // Reset
         STATE.pdfMergeQueue = [];
         renderMergeQueue();
         alert("Berhasil! File PDF telah digabungkan.");
@@ -298,7 +346,6 @@ window.processSplitPDF = async function() {
     }
 };
 
-// Helper: Parse Range "1-3, 5, 8-10"
 function parsePageRange(rangeStr, maxPages) {
     const pages = new Set();
     const parts = rangeStr.split(',');
@@ -308,10 +355,9 @@ function parsePageRange(rangeStr, maxPages) {
         if (part.includes('-')) {
             let [start, end] = part.split('-').map(Number);
             if (start && end) {
-                // Swap if reverse
                 if (start > end) [start, end] = [end, start];
                 for (let i = start; i <= end; i++) {
-                    if (i >= 1 && i <= maxPages) pages.add(i - 1); // 0-based index
+                    if (i >= 1 && i <= maxPages) pages.add(i - 1);
                 }
             }
         } else {
@@ -319,7 +365,6 @@ function parsePageRange(rangeStr, maxPages) {
             if (num >= 1 && num <= maxPages) pages.add(num - 1);
         }
     });
-    
     return Array.from(pages).sort((a, b) => a - b);
 }
 
@@ -339,22 +384,17 @@ window.processImgToPdf = async function() {
             const buffer = await file.arrayBuffer();
             let image;
             
-            // Cek tipe file
             if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
                 image = await pdfDoc.embedJpg(buffer);
             } else if (file.type === 'image/png') {
                 image = await pdfDoc.embedPng(buffer);
             } else {
-                continue; // Skip file non-gambar
+                continue; 
             }
 
-            // Buat halaman sesuai ukuran gambar
             const page = pdfDoc.addPage([image.width, image.height]);
             page.drawImage(image, {
-                x: 0,
-                y: 0,
-                width: image.width,
-                height: image.height,
+                x: 0, y: 0, width: image.width, height: image.height,
             });
         }
 
@@ -368,7 +408,7 @@ window.processImgToPdf = async function() {
     }
 };
 
-// --- PDF TO IMAGE (Improved) ---
+// --- PDF TO IMAGE ---
 window.processPdfToImg = async function() {
     const input = document.getElementById('pdfToImgInput');
     if (!input.files[0]) return alert("Pilih PDF terlebih dahulu!");
@@ -381,10 +421,9 @@ window.processPdfToImg = async function() {
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
 
-        // Loop Sequential agar browser tidak freeze
         for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
-            const viewport = page.getViewport({ scale: 1.5 }); // Scale 1.5x untuk kualitas HD
+            const viewport = page.getViewport({ scale: 1.5 });
             
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
@@ -393,15 +432,13 @@ window.processPdfToImg = async function() {
 
             await page.render({ canvasContext: context, viewport: viewport }).promise;
 
-            // Convert to Blob & Download
             const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.85));
             downloadBlob(blob, `Page-${i}-${file.name}.jpg`, "image/jpeg");
             
-            // Jeda sedikit agar UI update (breathe)
             await new Promise(r => setTimeout(r, 200));
         }
         
-        alert("Selesai! Pastikan Anda mengizinkan 'Multiple Downloads' di browser.");
+        alert("Selesai! Pastikan izin 'Multiple Downloads' aktif.");
 
     } catch (err) {
         console.error(err);
@@ -415,12 +452,11 @@ window.processPdfToImg = async function() {
 // FEATURE: MEDIA TOOLS
 // ==========================================
 
-// --- VIDEO TOOLS (MAINTENANCE) ---
 window.processVideoToAudio = function() {
-    alert("Fitur ini membutuhkan pemrosesan server yang berat. Karena SilentSuite berjalan 100% di browser Anda (tanpa server), fitur ini sedang dinonaktifkan untuk menjaga stabilitas perangkat Anda.");
+    alert("Fitur ini dinonaktifkan sementara untuk stabilitas browser mobile (Memory Safety). Gunakan fitur PDF dan Gambar yang sudah stabil.");
 };
 window.processVideoCompress = function() {
-    alert("Fitur ini sedang dalam tahap optimalisasi WebAssembly agar tidak memberatkan browser HP. Silakan gunakan fitur PDF dan Gambar yang sudah stabil.");
+    alert("Sedang dalam pengembangan untuk performa WebAssembly yang lebih ringan.");
 };
 
 // --- IMAGE COMPRESSOR ---
@@ -439,12 +475,8 @@ window.compressImage = async function() {
 
     try {
         const file = input.files[0];
-        
-        // Konversi ke MB
         let targetSizeMB = parseFloat(sizeVal);
-        if (unit === 'KB') {
-            targetSizeMB = targetSizeMB / 1024;
-        }
+        if (unit === 'KB') targetSizeMB = targetSizeMB / 1024;
 
         const options = {
             maxSizeMB: targetSizeMB,
@@ -454,7 +486,6 @@ window.compressImage = async function() {
 
         const compressedFile = await imageCompression(file, options);
         
-        // Tampilkan Hasil
         resultBox.innerHTML = `
             <div class="text-center">
                 <p class="text-sm text-slate-500 mb-2">Original: ${(file.size/1024).toFixed(1)}KB -> <b>${(compressedFile.size/1024).toFixed(1)}KB</b></p>
@@ -465,7 +496,6 @@ window.compressImage = async function() {
         `;
         resultBox.classList.remove('hidden');
 
-        // Setup Download Button
         const dlBtn = document.getElementById('dl-compressed');
         dlBtn.onclick = () => downloadBlob(compressedFile, `compressed-${file.name}`, file.type);
 
@@ -497,7 +527,6 @@ window.processImageConvert = function() {
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
             
-            // Fill white background for PNG -> JPG transparency issue
             if (format === 'image/jpeg') {
                 ctx.fillStyle = '#FFFFFF';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -535,7 +564,6 @@ window.generateMeme = function() {
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0);
 
-            // Text Style
             const fontSize = Math.floor(img.width / 10);
             ctx.font = `900 ${fontSize}px Impact, sans-serif`;
             ctx.fillStyle = 'white';
@@ -543,17 +571,14 @@ window.generateMeme = function() {
             ctx.lineWidth = Math.floor(fontSize / 8);
             ctx.textAlign = 'center';
 
-            // Draw Top
             ctx.textBaseline = 'top';
             ctx.strokeText(topText, canvas.width / 2, 10);
             ctx.fillText(topText, canvas.width / 2, 10);
 
-            // Draw Bottom
             ctx.textBaseline = 'bottom';
             ctx.strokeText(bottomText, canvas.width / 2, canvas.height - 10);
             ctx.fillText(bottomText, canvas.width / 2, canvas.height - 10);
 
-            // Download
             canvas.toBlob(blob => {
                 downloadBlob(blob, 'meme-silentsuite.png', 'image/png');
             });
@@ -564,10 +589,9 @@ window.generateMeme = function() {
 };
 
 // ==========================================
-// FEATURE: UTILITIES
+// FEATURE: UTILITIES (QR, Pass, Unit)
 // ==========================================
 
-// --- QR MAKER ---
 window.generateQR = function() {
     const text = document.getElementById('qrInput').value;
     const container = document.getElementById('qrResult');
@@ -575,21 +599,17 @@ window.generateQR = function() {
     
     if (!text) return alert("Masukkan teks atau link!");
     
-    container.innerHTML = ""; // Clear old QR
+    container.innerHTML = "";
     container.classList.remove('hidden');
     hint.classList.remove('hidden');
     
     new QRCode(container, {
-        text: text,
-        width: 200,
-        height: 200,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
+        text: text, width: 200, height: 200,
+        colorDark : "#000000", colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
     });
 };
 
-// --- PASSWORD GENERATOR ---
 window.generatePass = function() {
     const length = document.getElementById('passLength').value;
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
@@ -606,14 +626,12 @@ window.copyPass = function() {
     el.select();
     navigator.clipboard.writeText(el.value);
     
-    // Feedback visual kecil
     const btn = document.querySelector('button[title="Copy"]');
     const original = btn.innerHTML;
     btn.innerHTML = '<i class="fa-solid fa-check text-green-500"></i>';
     setTimeout(() => btn.innerHTML = original, 1500);
 };
 
-// --- UNIT CONVERTER ---
 window.updateUnitOptions = function() {
     const cat = document.getElementById('unitCat').value;
     const from = document.getElementById('unitFrom');
@@ -625,15 +643,12 @@ window.updateUnitOptions = function() {
         temp:   { c: 'Celsius', f: 'Fahrenheit', k: 'Kelvin' }
     };
     
-    from.innerHTML = ''; 
-    to.innerHTML = '';
-    
+    from.innerHTML = ''; to.innerHTML = '';
     Object.entries(options[cat]).forEach(([key, label]) => {
         from.add(new Option(label, key));
         to.add(new Option(label, key));
     });
     
-    // Set default different values
     if(cat === 'length') { to.value = 'km'; }
     if(cat === 'weight') { to.value = 'g'; }
     if(cat === 'temp') { to.value = 'f'; }
@@ -648,28 +663,21 @@ window.convertUnit = function() {
     if (isNaN(val)) return;
 
     let result;
-
     if (cat === 'temp') {
-        // Temperature Conversion Logic
         if (from === to) result = val;
         else if (from === 'c') result = to === 'f' ? (val * 9/5) + 32 : val + 273.15;
         else if (from === 'f') result = to === 'c' ? (val - 32) * 5/9 : (val - 32) * 5/9 + 273.15;
         else if (from === 'k') result = to === 'c' ? val - 273.15 : (val - 273.15) * 9/5 + 32;
     } else {
-        // Length & Weight (Base Unit Conversion)
-        // Base: Meter (Length), Kilogram (Weight)
         const factors = {
             length: { m: 1, km: 1000, cm: 0.01, mm: 0.001, ft: 0.3048, in: 0.0254, yd: 0.9144 },
             weight: { kg: 1, g: 0.001, mg: 0.000001, lb: 0.453592, oz: 0.0283495 }
         };
-        
         const baseValue = val * factors[cat][from];
         result = baseValue / factors[cat][to];
     }
 
-    // Tampilkan hasil (maksimal 6 desimal jika perlu)
     const displayResult = Number.isInteger(result) ? result : parseFloat(result.toFixed(6));
-    
     document.getElementById('unitResult').innerText = displayResult;
     document.getElementById('unitResultLabel').innerText = to;
 };
@@ -687,8 +695,6 @@ function downloadBlob(data, filename, mimeType) {
     a.download = filename;
     document.body.appendChild(a);
     a.click();
-    
-    // Cleanup memory
     setTimeout(() => {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
@@ -697,7 +703,7 @@ function downloadBlob(data, filename, mimeType) {
 
 function setLoading(btnElement, isLoading, text) {
     if (isLoading) {
-        btnElement.dataset.originalText = text; // Simpan teks untuk jaga-jaga
+        btnElement.dataset.originalText = text;
         btnElement.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin-fast"></i> ${text}`;
         btnElement.disabled = true;
         btnElement.classList.add('opacity-75', 'cursor-not-allowed');

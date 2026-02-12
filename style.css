@@ -139,3 +139,121 @@ img, video {
     max-width: 100%;
     height: auto;
 }
+
+/* =========================================
+   8. NEW UI COMPONENTS (v2.0 Update)
+   ========================================= */
+
+/* Back Button Style */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    color: #64748b; /* slate-500 */
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    background-color: transparent;
+    margin-bottom: 1.5rem;
+}
+
+.btn-back:hover {
+    color: #0f172a; /* slate-900 */
+    background-color: #f1f5f9; /* slate-100 */
+    transform: translateX(-2px);
+}
+
+/* File Preview Item Card */
+.file-preview-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    margin-top: 0.75rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    animation: fadeScale 0.3s ease forwards;
+}
+
+.file-preview-item:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.file-preview-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    overflow: hidden;
+}
+
+.file-thumb {
+    width: 3rem;
+    height: 3rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    background-color: #f8fafc;
+    border: 1px solid #f1f5f9;
+}
+
+.file-icon-placeholder {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background-color: #f1f5f9;
+    color: #64748b;
+    font-size: 1.25rem;
+    border: 1px solid #e2e8f0;
+}
+
+.file-meta {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.file-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #334155;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+@media (min-width: 640px) {
+    .file-name {
+        max-width: 300px;
+    }
+}
+
+.file-size {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.btn-remove-file {
+    color: #94a3b8;
+    padding: 0.375rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-remove-file:hover {
+    color: #ef4444; /* red-500 */
+    background-color: #fef2f2; /* red-50 */
+}
