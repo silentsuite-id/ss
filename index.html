@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    
+    <title>SilentSuite | All-in-One Web Tools (Privacy First)</title>
+
+    <meta name="description" content="All-in-One Web Tools gratis berbasis client-side. Gabung & pecah PDF, convert video ke audio, kompres video, convert gambar, buat QR Code. Cepat, aman, tanpa upload server.">
+    <meta name="keywords" content="web tools gratis, pdf merger online, pdf splitter, image to pdf, video converter, privacy tools, client side tools, SilentSuite">
+    <meta name="author" content="SilentSuite">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SilentSuite | Privacy-First Web Tools">
+    <meta property="og:description" content="Satu website untuk semua. PDF Tools, Media Converter, QR Generator. 100% client-side, cepat & aman.">
+    <meta property="og:url" content="https://silentsuite.web.id">
+    <meta property="og:image" content="assets/logo.png">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        slate: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+                        'card': '0 0 0 1px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.04)',
+                        'card-hover': '0 0 0 1px rgba(0,0,0,0.03), 0 12px 24px -4px rgba(0,0,0,0.08)',
+                        'glow': '0 0 20px rgba(16, 185, 129, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.0/dist/browser-image-compression.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+</head>
+<body class="bg-slate-50 text-slate-600 antialiased selection:bg-brand-100 selection:text-brand-700 flex flex-col min-h-screen">
+
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/60 transition-all duration-300 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="route-link flex items-center gap-2.5 group">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center text-white shadow-lg shadow-brand-500/20 group-hover:scale-105 transition-transform duration-300">
+                        <i class="fa-solid fa-ghost text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-lg tracking-tight text-slate-900 block leading-tight">SilentSuite</span>
+                    </div>
+                </a>
+
+                <div class="hidden md:block">
+                    <div class="flex items-center bg-slate-100/50 p-1 rounded-full border border-slate-200/60 backdrop-blur-sm">
+                        <a href="/" class="nav-btn route-link px-5 py-1.5 rounded-full text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 focus:bg-white focus:text-brand-700 focus:shadow-sm">Overview</a>
+                        <a href="/pdf-tools" class="nav-btn route-link px-5 py-1.5 rounded-full text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 focus:bg-white focus:text-brand-700 focus:shadow-sm">PDF Tools</a>
+                        <a href="/media-tools" class="nav-btn route-link px-5 py-1.5 rounded-full text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 focus:bg-white focus:text-brand-700 focus:shadow-sm">Media Tools</a>
+                        <a href="/utilities" class="nav-btn route-link px-5 py-1.5 rounded-full text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 focus:bg-white focus:text-brand-700 focus:shadow-sm">Utils</a>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition" aria-label="Menu">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl absolute w-full shadow-lg">
+            <div class="p-4 space-y-1">
+                <a href="/" class="route-link block w-full text-left px-4 py-3 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-brand-700">Overview</a>
+                <a href="/pdf-tools" class="route-link block w-full text-left px-4 py-3 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-brand-700">PDF Tools</a>
+                <a href="/media-tools" class="route-link block w-full text-left px-4 py-3 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-brand-700">Media Tools</a>
+                <a href="/utilities" class="route-link block w-full text-left px-4 py-3 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-brand-700">Utilities</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex-grow">
+        
+        <section id="home" class="tab-content block animate-fade-in-up">
+            <div class="text-center max-w-4xl mx-auto pt-16 pb-20">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold mb-8 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                    100% Client Side Processing
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.1]">
+                    One Suite<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-teal-500">For Privacy.</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
+                    Web tools tanpa upload server. Manipulasi PDF, Kompresi Media, dan Utilitas harian. 
+                    Gratis, Cepat, dan Data Anda 100% Aman di browser.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mb-20">
+                    <a href="/pdf-tools" class="route-link group px-8 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-full transition shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2">
+                        <span>Mulai Sekarang</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+
+                    <button onclick="document.getElementById('footer-list').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold rounded-full transition shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play text-brand-600"></i> Lihat Fitur
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                    <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-card hover:shadow-card-hover transition duration-300 group">
+                        <div class="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition border border-brand-100">
+                            <i class="fa-solid fa-bolt text-brand-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">WebAssembly Engine</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Performa setara aplikasi desktop native. Memproses file berat tanpa lag langsung di browser.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-card hover:shadow-card-hover transition duration-300 group">
+                        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition border border-blue-100">
+                            <i class="fa-solid fa-shield-halved text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Privacy First</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">File dokumen penting Anda aman. Tidak ada satu byte pun data yang dikirim ke server cloud.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-card hover:shadow-card-hover transition duration-300 group">
+                        <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition border border-purple-100">
+                            <i class="fa-solid fa-wifi text-purple-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Offline Ready (PWA)</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Install sebagai aplikasi. Tetap berfungsi 100% meskipun koneksi internet Anda terputus total.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pdf-tools" class="app-view hidden animate-fade-in-up">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Document Center</h2>
+                <p class="text-slate-600">Alat manipulasi dokumen PDF profesional & aman.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <a href="/pdf-merger" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-red-50 rounded-xl text-red-600 border border-red-100 group-hover:scale-110 transition"><i class="fa-solid fa-layer-group text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-red-600 transition">PDF Merger</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Gabungkan banyak file PDF menjadi satu.</p>
+                </a>
+
+                <a href="/pdf-splitter" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-orange-50 rounded-xl text-orange-600 border border-orange-100 group-hover:scale-110 transition"><i class="fa-solid fa-scissors text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition">PDF Splitter</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Pisahkan halaman PDF menjadi file terpisah.</p>
+                </a>
+
+                <a href="/image-to-pdf" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-blue-50 rounded-xl text-blue-600 border border-blue-100 group-hover:scale-110 transition"><i class="fa-solid fa-images text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition">Image to PDF</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Ubah scan JPG/PNG menjadi dokumen PDF.</p>
+                </a>
+
+                <a href="/pdf-to-image" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-teal-50 rounded-xl text-teal-600 border border-teal-100 group-hover:scale-110 transition"><i class="fa-solid fa-file-image text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-teal-600 transition">PDF to Image</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Ekstrak halaman PDF menjadi gambar.</p>
+                </a>
+            </div>
+        </section>
+
+        <section id="pdf-merger" class="app-view hidden animate-fade-in-up max-w-4xl mx-auto">
+            <a href="/pdf-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu PDF
+            </a>
+            
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden p-8 md:p-10">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="p-4 bg-red-50 rounded-2xl text-red-600 border border-red-100 shadow-sm">
+                        <i class="fa-solid fa-layer-group text-3xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-slate-900">PDF Merger</h1>
+                        <p class="text-slate-500 mt-1">Gabungkan file PDF tanpa batas, urutkan sesuai keinginan.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <label class="block w-full border-2 border-dashed border-slate-300 hover:border-red-400 hover:bg-red-50/30 rounded-2xl p-12 text-center cursor-pointer transition-all group">
+                        <input type="file" id="mergeInput" multiple accept=".pdf" class="hidden">
+                        <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition duration-300 shadow-sm">
+                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-400 group-hover:text-red-500 transition"></i>
+                        </div>
+                        <p class="text-lg text-slate-700 font-bold">Klik untuk upload file PDF</p>
+                        <p class="text-sm text-slate-500 mt-1">atau drag & drop file ke sini</p>
+                    </label>
+                    
+                    <div id="mergeFileList" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar"></div>
+                    
+                    <button onclick="processMergePDF()" class="w-full py-4 bg-red-600 hover:bg-red-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-red-500/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bolt"></i> Gabungkan Sekarang
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="pdf-splitter" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="/pdf-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu PDF
+            </a>
+
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="p-3 bg-orange-50 rounded-xl text-orange-600 border border-orange-100"><i class="fa-solid fa-scissors text-2xl"></i></div>
+                    <h1 class="text-2xl font-bold text-slate-900">PDF Splitter</h1>
+                </div>
+
+                <div class="space-y-5">
+                    <label class="block w-full border-2 border-dashed border-slate-300 hover:border-orange-400 hover:bg-orange-50/30 rounded-2xl p-8 text-center cursor-pointer transition-all group">
+                        <input type="file" id="splitInput" accept=".pdf" class="hidden">
+                         <div class="flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-file-pdf text-2xl text-slate-400 group-hover:text-orange-500 transition"></i>
+                            <span class="text-slate-600 font-semibold group-hover:text-slate-900">Pilih File PDF</span>
+                         </div>
+                    </label>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Pilih Halaman</label>
+                        <input type="text" id="splitRange" placeholder="Contoh: 1-5, 8, 10-12" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl p-4 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition font-mono">
+                        <p class="text-xs text-slate-500 mt-2">Gunakan tanda koma (,) untuk halaman acak atau strip (-) untuk rentang.</p>
+                    </div>
+
+                    <button onclick="processSplitPDF()" class="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-md transition">Pisahkan PDF</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="image-to-pdf" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="/pdf-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu PDF
+            </a>
+
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="p-3 bg-blue-50 rounded-xl text-blue-600 border border-blue-100"><i class="fa-solid fa-images text-2xl"></i></div>
+                    <h1 class="text-2xl font-bold text-slate-900">Image to PDF</h1>
+                </div>
+                
+                <div class="space-y-6">
+                     <label class="block w-full border-2 border-dashed border-slate-300 hover:border-blue-400 hover:bg-blue-50/30 rounded-2xl p-10 text-center cursor-pointer transition-all group">
+                        <input type="file" id="imgToPdfInput" multiple accept="image/*" class="hidden">
+                        <i class="fa-solid fa-image text-3xl text-slate-400 group-hover:text-blue-500 mb-3 transition"></i>
+                        <p class="text-sm text-slate-700 font-bold">Upload Gambar (JPG/PNG)</p>
+                    </label>
+
+                    <button onclick="processImgToPdf()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition">Convert to PDF</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="pdf-to-image" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="/pdf-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu PDF
+            </a>
+
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="p-3 bg-teal-50 rounded-xl text-teal-600 border border-teal-100"><i class="fa-solid fa-file-image text-2xl"></i></div>
+                    <h1 class="text-2xl font-bold text-slate-900">PDF to Image</h1>
+                </div>
+
+                <div class="space-y-6">
+                    <label class="block w-full border-2 border-dashed border-slate-300 hover:border-teal-400 hover:bg-teal-50/30 rounded-2xl p-8 text-center cursor-pointer transition-all group">
+                        <input type="file" id="pdfToImgInput" accept=".pdf" class="hidden">
+                         <div class="flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-file-pdf text-2xl text-slate-400 group-hover:text-teal-500 transition"></i>
+                            <span class="text-slate-600 font-semibold group-hover:text-slate-900">Pilih File PDF</span>
+                         </div>
+                    </label>
+                    
+                    <button onclick="processPdfToImg()" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow-md transition">Ekstrak Gambar</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="media-tools" class="app-view hidden animate-fade-in-up">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Media Tools</h2>
+                <p class="text-slate-600">Optimasi Video, Audio, dan Gambar tingkat lanjut.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <a href="/video-to-mp3" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-purple-50 rounded-xl text-purple-600 border border-purple-100 group-hover:scale-110 transition"><i class="fa-solid fa-music text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-purple-600 transition">Video to MP3</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Ambil audio dari video (Extract).</p>
+                </a>
+
+                <a href="/video-compress" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-pink-50 rounded-xl text-pink-600 border border-pink-100 group-hover:scale-110 transition"><i class="fa-solid fa-compress text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-pink-600 transition">Video Compress</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Kecilkan ukuran video MP4.</p>
+                </a>
+
+                <a href="/image-compressor" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-brand-50 rounded-xl text-brand-600 border border-brand-100 group-hover:scale-110 transition"><i class="fa-solid fa-minimize text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition">Image Compress</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Kompres JPG/PNG sesuai ukuran (KB/MB).</p>
+                </a>
+
+                <a href="/image-converter" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-teal-50 rounded-xl text-teal-600 border border-teal-100 group-hover:scale-110 transition"><i class="fa-solid fa-rotate text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-teal-600 transition">WebP Converter</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Ubah WebP/HEIC jadi JPG/PNG.</p>
+                </a>
+
+                <a href="/meme-generator" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-yellow-50 rounded-xl text-yellow-600 border border-yellow-100 group-hover:scale-110 transition"><i class="fa-solid fa-face-grin-tongue-wink text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-yellow-600 transition">Meme Generator</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Buat meme lucu teks atas-bawah.</p>
+                </a>
+            </div>
+        </section>
+
+        <section id="video-to-mp3" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="/media-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition"><i class="fa-solid fa-arrow-left"></i> Kembali ke Media</a>
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-purple-50 rounded-xl text-purple-600 border border-purple-100"><i class="fa-solid fa-music text-2xl"></i></div>
+                    <h1 class="text-2xl font-bold text-slate-900">Video to MP3</h1>
+                </div>
+                
+                <label class="block w-full border-2 border-dashed border-slate-300 hover:border-purple-400 hover:bg-purple-50/30 rounded-2xl p-8 text-center cursor-pointer transition-all group mb-6">
+                    <input type="file" id="videoInput" accept="video/*" class="hidden">
+                    <div class="flex items-center justify-center gap-3">
+                       <i class="fa-solid fa-film text-2xl text-slate-400 group-hover:text-purple-500 transition"></i>
+                       <span class="text-slate-600 font-semibold group-hover:text-slate-900">Pilih File Video</span>
+                    </div>
+                </label>
+
+                <button onclick="processVideoToAudio()" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-md transition">Extract Audio</button>
+            </div>
+        </section>
+
+        <section id="video-compress" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="/media-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition"><i class="fa-solid fa-arrow-left"></i> Kembali ke Media</a>
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-pink-50 rounded-xl text-pink-600 border border-pink-100"><i class="fa-solid fa-compress text-2xl"></i></div>
+                    <h1 class="text-2xl font-bold text-slate-900">Video Compressor</h1>
+                </div>
+                
+                <label class="block w-full border-2 border-dashed border-slate-300 hover:border-pink-400 hover:bg-pink-50/30 rounded-2xl p-8 text-center cursor-pointer transition-all group mb-6">
+                    <input type="file" id="compressVideoInput" accept="video/*" class="hidden">
+                    <div class="flex items-center justify-center gap-3">
+                       <i class="fa-solid fa-film text-2xl text-slate-400 group-hover:text-pink-500 transition"></i>
+                       <span class="text-slate-600 font-semibold group-hover:text-slate-900">Pilih File Video</span>
+                    </div>
+                </label>
+                
+                <button onclick="processVideoCompress()" class="w-full py-3 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-xl shadow-md transition">Compress Video</button>
+            </div>
+        </section>
+
+        <section id="image-compressor" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="/media-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition"><i class="fa-solid fa-arrow-left"></i> Kembali ke Media</a>
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-brand-50 rounded-xl text-brand-600 border border-brand-100"><i class="fa-solid fa-minimize text-2xl"></i></div>
+                    <h1 class="text-2xl font-bold text-slate-900">Image Compressor</h1>
+                </div>
+                
+                <div class="space-y-6">
+                    <label class="block w-full border-2 border-dashed border-slate-300 hover:border-brand-400 hover:bg-brand-50/30 rounded-2xl p-8 text-center cursor-pointer transition-all group">
+                        <input type="file" id="imageInput" accept="image/*" class="hidden">
+                        <div class="flex items-center justify-center gap-3">
+                           <i class="fa-regular fa-image text-2xl text-slate-400 group-hover:text-brand-500 transition"></i>
+                           <span class="text-slate-600 font-semibold group-hover:text-slate-900">Pilih Gambar</span>
+                        </div>
+                    </label>
+                    
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Target Max Size</label>
+                        <div class="flex gap-3">
+                            <input type="number" id="compressSizeVal" value="200" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 font-bold focus:border-brand-500 outline-none" placeholder="Contoh: 200">
+                            <select id="compressUnit" class="bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm text-slate-600 font-bold focus:border-brand-500 outline-none">
+                                <option value="KB">KB</option>
+                                <option value="MB">MB</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button onclick="compressImage()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-md transition">Compress Now</button>
+                    <div id="compressionResult" class="mt-4 hidden p-4 bg-brand-50 rounded-xl border border-brand-100"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="image-converter" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="/media-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition"><i class="fa-solid fa-arrow-left"></i> Kembali ke Media</a>
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-teal-50 rounded-xl text-teal-600 border border-teal-100"><i class="fa-solid fa-rotate text-2xl"></i></div>
+                    <h1 class="text-2xl font-bold text-slate-900">WebP Converter</h1>
+                </div>
+                
+                <div class="space-y-6">
+                     <label class="block w-full border-2 border-dashed border-slate-300 hover:border-teal-400 hover:bg-teal-50/30 rounded-2xl p-8 text-center cursor-pointer transition-all group">
+                        <input type="file" id="imgConvertInput" accept="image/*" class="hidden">
+                        <div class="flex items-center justify-center gap-3">
+                           <i class="fa-regular fa-image text-2xl text-slate-400 group-hover:text-teal-500 transition"></i>
+                           <span class="text-slate-600 font-semibold group-hover:text-slate-900">Pilih Gambar</span>
+                        </div>
+                    </label>
+                    
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Format Tujuan</label>
+                        <select id="targetFormat" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-700 font-bold outline-none focus:border-teal-500">
+                            <option value="image/jpeg">JPG (Universal)</option>
+                            <option value="image/png">PNG (Transparan)</option>
+                        </select>
+                    </div>
+
+                    <button onclick="processImageConvert()" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow-md transition">Convert Image</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="meme-generator" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="/media-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition"><i class="fa-solid fa-arrow-left"></i> Kembali ke Media</a>
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-yellow-50 rounded-xl text-yellow-600 border border-yellow-100"><i class="fa-solid fa-face-laugh-squint text-2xl"></i></div>
+                    <h1 class="text-2xl font-bold text-slate-900">Meme Generator</h1>
+                </div>
+                
+                <div class="space-y-4">
+                     <label class="block w-full border-2 border-dashed border-slate-300 hover:border-yellow-400 hover:bg-yellow-50/30 rounded-2xl p-8 text-center cursor-pointer transition-all group">
+                        <input type="file" id="memeInput" accept="image/*" class="hidden">
+                        <div class="flex items-center justify-center gap-3">
+                           <i class="fa-regular fa-image text-2xl text-slate-400 group-hover:text-yellow-500 transition"></i>
+                           <span class="text-slate-600 font-semibold group-hover:text-slate-900">Pilih Gambar Dasar</span>
+                        </div>
+                    </label>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" id="memeTop" placeholder="TEKS ATAS" class="bg-slate-50 border border-slate-300 rounded-xl p-3 text-center font-bold uppercase outline-none focus:border-yellow-500 focus:bg-white transition">
+                        <input type="text" id="memeBottom" placeholder="TEKS BAWAH" class="bg-slate-50 border border-slate-300 rounded-xl p-3 text-center font-bold uppercase outline-none focus:border-yellow-500 focus:bg-white transition">
+                    </div>
+
+                    <button onclick="generateMeme()" class="w-full py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-xl shadow-md transition">Buat Meme</button>
+                    <canvas id="memeCanvas" class="hidden"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="utilities" class="app-view hidden animate-fade-in-up">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Essential Utilities</h2>
+                <p class="text-slate-600">Alat bantu sehari-hari yang wajib ada.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <a href="/qr-maker" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-slate-100 rounded-xl text-slate-700 border border-slate-200 group-hover:scale-110 transition"><i class="fa-solid fa-qrcode text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-slate-700 transition">QR Code Maker</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Buat QR Code untuk WiFi atau Link.</p>
+                </a>
+
+                <a href="/password-generator" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-brand-50 rounded-xl text-brand-600 border border-brand-100 group-hover:scale-110 transition"><i class="fa-solid fa-lock text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition">Password Gen</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Generator password kuat & acak.</p>
+                </a>
+
+                <a href="/unit-converter" class="route-link group bg-white p-6 rounded-2xl border border-slate-200 shadow-card hover:shadow-card-hover transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-blue-50 rounded-xl text-blue-600 border border-blue-100 group-hover:scale-110 transition"><i class="fa-solid fa-ruler-combined text-xl"></i></div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition">Unit Converter</h3>
+                    </div>
+                    <p class="text-sm text-slate-500">Konversi Panjang, Berat, & Suhu.</p>
+                </a>
+            </div>
+        </section>
+
+        <section id="qr-maker" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="/utilities" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Utils
+            </a>
+
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-slate-100 rounded-xl text-slate-700 border border-slate-200"><i class="fa-solid fa-qrcode text-2xl"></i></div>
+                    <h1 class="text-2xl font-bold text-slate-900">QR Code Maker</h1>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Isi Konten QR</label>
+                        <input type="text" id="qrInput" placeholder="Masukkan Link Website / Teks / WiFi" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-4 text-slate-900 outline-none focus:border-slate-500 transition">
+                    </div>
+
+                    <button onclick="generateQR()" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition">Generate QR Code</button>
+                    
+                    <div id="qrResult" class="mt-8 flex justify-center bg-white rounded-xl p-6 hidden border border-slate-200 w-fit mx-auto shadow-sm"></div>
+                    <p class="text-center text-xs text-slate-400 mt-2 hidden" id="qrHint">*Klik kanan / Tahan gambar untuk simpan</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="password-generator" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="/utilities" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Utils
+            </a>
+
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-brand-50 rounded-xl text-brand-600 border border-brand-100"><i class="fa-solid fa-lock text-2xl"></i></div>
+                        <h1 class="text-2xl font-bold text-slate-900">Secure Pass</h1>
+                    </div>
+                    <span class="text-xs bg-brand-100 text-brand-800 px-3 py-1 rounded-full font-bold uppercase tracking-wide">Strong</span>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="relative">
+                        <input type="text" id="passResult" readonly class="w-full bg-slate-50 border border-slate-300 rounded-xl p-5 text-brand-600 font-mono text-xl md:text-2xl text-center tracking-widest outline-none font-bold">
+                        <button onclick="copyPass()" class="absolute right-3 top-3 bottom-3 px-4 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-500 transition active:scale-95 shadow-sm tooltip" title="Copy">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <div class="flex justify-between text-sm text-slate-600 font-bold mb-4">
+                            <span>Panjang Password: <span id="lenVal" class="text-brand-600 text-lg">16</span></span>
+                            <span>Karakter Acak</span>
+                        </div>
+                        <input type="range" id="passLength" min="8" max="50" value="16" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-600">
+                    </div>
+
+                    <button onclick="generatePass()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-md transition shadow-brand-500/20">
+                        <i class="fa-solid fa-rotate mr-2"></i> Buat Password Baru
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="unit-converter" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="/utilities" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Utils
+            </a>
+
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-blue-50 rounded-xl text-blue-600 border border-blue-100"><i class="fa-solid fa-ruler-combined text-2xl"></i></div>
+                    <h1 class="text-2xl font-bold text-slate-900">Unit Converter</h1>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Nilai</label>
+                            <input type="number" id="unitVal" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-slate-900 font-bold text-lg focus:border-blue-500 outline-none" placeholder="0">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Kategori</label>
+                            <select id="unitCat" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-700 font-semibold focus:border-blue-500 outline-none appearance-none" onchange="updateUnitOptions()">
+                                <option value="length">Panjang (Length)</option>
+                                <option value="weight">Berat (Weight)</option>
+                                <option value="temp">Suhu (Temperature)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <select id="unitFrom" class="flex-1 bg-white text-slate-700 font-semibold text-sm p-2 rounded-lg border border-slate-200 outline-none"></select>
+                        <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                        <select id="unitTo" class="flex-1 bg-white text-slate-700 font-semibold text-sm p-2 rounded-lg border border-slate-200 outline-none"></select>
+                    </div>
+
+                    <div class="text-center py-4">
+                        <span id="unitResult" class="text-4xl font-extrabold text-blue-600 block mb-1">0</span>
+                        <span id="unitResultLabel" class="text-sm text-slate-500 font-bold uppercase tracking-wider">Unit</span>
+                    </div>
+
+                    <button onclick="convertUnit()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition shadow-blue-500/20">Konversi Sekarang</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="footer-list" class="bg-slate-900 border-t border-slate-800 pt-16 pb-8 relative z-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+                <div class="col-span-2 lg:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-brand-500 text-white flex items-center justify-center shadow-lg shadow-brand-500/20">
+                            <i class="fa-solid fa-ghost text-sm"></i>
+                        </div>
+                        <span class="font-bold text-xl text-white tracking-tight">SilentSuite</span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6 max-w-sm font-medium">
+                        Secure, Serverless, Simple. <br>
+                        Platform utilitas modern yang menghormati privasi digital Anda. Tanpa Server dan Tanpa Biaya. Dijalankan sepenuhnya di perangkat Anda.
+                    </p>
+                    <div class="flex gap-3">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-800 border border-slate-700 text-[11px] font-bold text-slate-300 shadow-sm">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            v1.0.0 Stable
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-800 border border-slate-700 text-[11px] font-bold text-slate-300 shadow-sm">
+                            <i class="fa-brands fa-chrome text-slate-500"></i>
+                            PWA Ready
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-200 text-xs uppercase tracking-wider mb-4">Documents</h4>
+                    <ul class="space-y-3 text-sm text-slate-400 font-medium">
+                        <li><a href="/pdf-merger" class="route-link hover:text-brand-400 transition-colors flex items-center gap-2">PDF Merger</a></li>
+                        <li><a href="/pdf-splitter" class="route-link hover:text-brand-400 transition-colors">PDF Splitter</a></li>
+                        <li><a href="/image-to-pdf" class="route-link hover:text-brand-400 transition-colors">Image to PDF</a></li>
+                        <li><a href="/pdf-to-image" class="route-link hover:text-brand-400 transition-colors">PDF to Image</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-200 text-xs uppercase tracking-wider mb-4">Media Tools</h4>
+                    <ul class="space-y-3 text-sm text-slate-400 font-medium">
+                        <li><a href="/video-to-mp3" class="route-link hover:text-brand-400 transition-colors">Video to MP3</a></li>
+                        <li><a href="/video-compress" class="route-link hover:text-brand-400 transition-colors">Video Compress</a></li>
+                        <li><a href="/image-compressor" class="route-link hover:text-brand-400 transition-colors">Image Compress</a></li>
+                        <li><a href="/image-converter" class="route-link hover:text-brand-400 transition-colors">WebP Converter</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-200 text-xs uppercase tracking-wider mb-4">Utilities</h4>
+                    <ul class="space-y-3 text-sm text-slate-400 font-medium">
+                        <li><a href="/qr-maker" class="route-link hover:text-brand-400 transition-colors">QR Code Maker</a></li>
+                        <li><a href="/password-generator" class="route-link hover:text-brand-400 transition-colors">Password Gen</a></li>
+                        <li><a href="/unit-converter" class="route-link hover:text-brand-400 transition-colors">Unit Converter</a></li>
+                        <li><a href="/meme-generator" class="route-link hover:text-brand-400 transition-colors">Meme Generator</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-slate-500 font-medium">
+                    &copy; 2026 SilentSuite Inc. Built for the privacy-conscious.
+                </p>
+
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-2 text-xs font-semibold text-slate-300 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-full shadow-sm">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        All Systems Operational
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

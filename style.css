@@ -1,0 +1,141 @@
+/* =========================================
+   SILENTSUITE GLOBAL STYLES
+   ========================================= */
+
+/* 1. Base Setup */
+html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden; /* Mencegah horizontal scroll tidak sengaja */
+}
+
+/* 2. Modern Scrollbar (Global) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1; /* slate-300 */
+    border-radius: 99px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8; /* slate-400 */
+}
+
+/* 3. Custom Scrollbar untuk Container Kecil (File List) */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+}
+
+/* 4. Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-fade-scale {
+    animation: fadeScale 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 5. Range Slider Customization (Premium Look) */
+input[type=range] {
+    -webkit-appearance: none; /* Hides default slider */
+    width: 100%;
+    background: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #10b981; /* brand-500 */
+    cursor: pointer;
+    margin-top: -8px; 
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+    border: 2px solid #ffffff;
+    transition: transform 0.1s ease;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    cursor: pointer;
+    background: #e2e8f0; /* slate-200 */
+    border-radius: 99px;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+/* 6. Utility Helper */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Glassmorphism Utilities */
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* 7. Loading Spinner Animation */
+.fa-spin-fast {
+    animation: fa-spin 1s infinite linear;
+}
+
+/* Responsive Container Fixes */
+img, video {
+    max-width: 100%;
+    height: auto;
+}
