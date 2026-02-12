@@ -130,13 +130,14 @@
                 </div>
                 
                 <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.1]">
-                    One Suite<br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-teal-500">For Privacy.</span>
+                    One Tools<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-teal-500">For All.</span>
                 </h1>
                 
                 <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
-                    Web tools tanpa upload server. Manipulasi PDF, Kompresi Media, dan Utilitas harian. 
-                    Gratis, Cepat, dan Data Anda 100% Aman di browser.
+                    Satu web untuk semua kebutuhan Anda.
+Gabung PDF, Kompres Gambar, dan masih banyak fitur lainnya.
+Tanpa login, tanpa biaya, dan privasi terjaga penuh.
                 </p>
                 
                 <div class="flex flex-col sm:flex-row justify-center gap-4 mb-20">
@@ -175,8 +176,11 @@
                 </div>
             </div>
         </section>
-
         <section id="pdf-tools" class="app-view hidden animate-fade-in-up">
+            <button onclick="window.location.hash='/'" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </button>
+
             <div class="mb-10 text-center md:text-left">
                 <h2 class="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Document Center</h2>
                 <p class="text-slate-600">Alat manipulasi dokumen PDF profesional & aman.</p>
@@ -218,9 +222,9 @@
         </section>
 
         <section id="pdf-merger" class="app-view hidden animate-fade-in-up max-w-4xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+            <a href="#/pdf-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu PDF
+            </a>
             
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden p-8 md:p-10">
                 <div class="flex items-center gap-4 mb-8">
@@ -253,9 +257,9 @@
         </section>
 
         <section id="pdf-splitter" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+            <a href="#/pdf-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu PDF
+            </a>
 
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
                 <div class="flex items-center gap-4 mb-8">
@@ -272,7 +276,7 @@
                          </div>
                     </label>
 
-                    <div id="preview-split" class="hidden"></div>
+                    <div id="preview-split" class="hidden space-y-2"></div>
                     
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">Pilih Halaman</label>
@@ -286,9 +290,9 @@
         </section>
 
         <section id="image-to-pdf" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+            <a href="#/pdf-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu PDF
+            </a>
 
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
                 <div class="flex items-center gap-4 mb-8">
@@ -311,9 +315,9 @@
         </section>
 
         <section id="pdf-to-image" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+            <a href="#/pdf-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu PDF
+            </a>
 
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
                 <div class="flex items-center gap-4 mb-8">
@@ -330,7 +334,7 @@
                          </div>
                     </label>
 
-                    <div id="preview-pdf-to-img" class="hidden"></div>
+                    <div id="preview-pdf-to-img" class="hidden space-y-2"></div>
                     
                     <button onclick="processPdfToImg()" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow-md transition">Ekstrak Gambar</button>
                 </div>
@@ -338,6 +342,10 @@
         </section>
 
         <section id="media-tools" class="app-view hidden animate-fade-in-up">
+            <button onclick="window.location.hash='/'" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </button>
+
             <div class="mb-10 text-center md:text-left">
                 <h2 class="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Media Tools</h2>
                 <p class="text-slate-600">Optimasi Video, Audio, dan Gambar tingkat lanjut.</p>
@@ -385,11 +393,8 @@
                 </a>
             </div>
         </section>
-
-        <section id="video-to-mp3" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+                <section id="video-to-mp3" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+            <a href="#/media-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition"><i class="fa-solid fa-arrow-left"></i> Kembali ke Media</a>
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="p-3 bg-purple-50 rounded-xl text-purple-600 border border-purple-100"><i class="fa-solid fa-music text-2xl"></i></div>
@@ -404,16 +409,14 @@
                     </div>
                 </label>
 
-                <div id="preview-video-mp3" class="hidden mb-6"></div>
+                <div id="preview-video-mp3" class="hidden mb-6 space-y-2"></div>
 
                 <button onclick="processVideoToAudio()" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-md transition">Extract Audio</button>
             </div>
         </section>
 
         <section id="video-compress" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+            <a href="#/media-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition"><i class="fa-solid fa-arrow-left"></i> Kembali ke Media</a>
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="p-3 bg-pink-50 rounded-xl text-pink-600 border border-pink-100"><i class="fa-solid fa-compress text-2xl"></i></div>
@@ -428,16 +431,14 @@
                     </div>
                 </label>
 
-                <div id="preview-video-compress" class="hidden mb-6"></div>
+                <div id="preview-video-compress" class="hidden mb-6 space-y-2"></div>
                 
                 <button onclick="processVideoCompress()" class="w-full py-3 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-xl shadow-md transition">Compress Video</button>
             </div>
         </section>
 
         <section id="image-compressor" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+            <a href="#/media-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition"><i class="fa-solid fa-arrow-left"></i> Kembali ke Media</a>
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="p-3 bg-brand-50 rounded-xl text-brand-600 border border-brand-100"><i class="fa-solid fa-minimize text-2xl"></i></div>
@@ -453,7 +454,7 @@
                         </div>
                     </label>
 
-                    <div id="preview-img-compress" class="hidden"></div>
+                    <div id="preview-img-compress" class="hidden space-y-2"></div>
                     
                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
                         <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Target Max Size</label>
@@ -473,9 +474,7 @@
         </section>
 
         <section id="image-converter" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+            <a href="#/media-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition"><i class="fa-solid fa-arrow-left"></i> Kembali ke Media</a>
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="p-3 bg-teal-50 rounded-xl text-teal-600 border border-teal-100"><i class="fa-solid fa-rotate text-2xl"></i></div>
@@ -491,7 +490,7 @@
                         </div>
                     </label>
 
-                    <div id="preview-img-convert" class="hidden"></div>
+                    <div id="preview-img-convert" class="hidden space-y-2"></div>
                     
                     <div>
                         <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Format Tujuan</label>
@@ -507,9 +506,7 @@
         </section>
 
         <section id="meme-generator" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+            <a href="#/media-tools" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition"><i class="fa-solid fa-arrow-left"></i> Kembali ke Media</a>
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="p-3 bg-yellow-50 rounded-xl text-yellow-600 border border-yellow-100"><i class="fa-solid fa-face-laugh-squint text-2xl"></i></div>
@@ -525,7 +522,7 @@
                         </div>
                     </label>
 
-                    <div id="preview-meme" class="hidden"></div>
+                    <div id="preview-meme" class="hidden space-y-2"></div>
                     
                     <div class="grid grid-cols-2 gap-4">
                         <input type="text" id="memeTop" placeholder="TEKS ATAS" class="bg-slate-50 border border-slate-300 rounded-xl p-3 text-center font-bold uppercase outline-none focus:border-yellow-500 focus:bg-white transition">
@@ -539,6 +536,10 @@
         </section>
 
         <section id="utilities" class="app-view hidden animate-fade-in-up">
+            <button onclick="window.location.hash='/'" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </button>
+
             <div class="mb-10 text-center md:text-left">
                 <h2 class="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Essential Utilities</h2>
                 <p class="text-slate-600">Alat bantu sehari-hari yang wajib ada.</p>
@@ -572,9 +573,9 @@
         </section>
 
         <section id="qr-maker" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+            <a href="#/utilities" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Utils
+            </a>
 
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
                 <div class="flex items-center gap-4 mb-6">
@@ -597,9 +598,9 @@
         </section>
 
         <section id="password-generator" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+            <a href="#/utilities" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Utils
+            </a>
 
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
                 <div class="flex items-center justify-between mb-6">
@@ -634,9 +635,9 @@
         </section>
 
         <section id="unit-converter" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
-            <button onclick="history.back()" class="btn-back">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
+            <a href="#/utilities" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Utils
+            </a>
 
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8">
                 <div class="flex items-center gap-4 mb-6">

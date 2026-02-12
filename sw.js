@@ -1,4 +1,4 @@
-const CACHE_NAME = 'silentsuite-v2-production';
+const CACHE_NAME = 'silentsuite';
 
 // Daftar aset vital yang harus tersedia Offline
 const ASSETS_TO_CACHE = [
@@ -29,7 +29,7 @@ self.addEventListener('install', (event) => {
     );
 });
 
-// 2. Activate Event: Bersihkan cache lama
+// 2. Activate Event: Bersihkan cache lama (PENTING untuk update versi)
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((cacheNames) => {

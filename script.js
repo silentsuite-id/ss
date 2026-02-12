@@ -9,13 +9,13 @@ const STATE = {
     currentView: 'home'
 };
 
-// Konfigurasi Worker PDF.js
+// Konfigurasi Worker PDF.js (Wajib agar tidak error)
 if (window.pdfjsLib) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 }
 
 // --- 2. ROUTING SYSTEM (HASH BASED) ---
-// Solusi aman untuk GitHub Pages
+// Solusi aman untuk GitHub Pages agar tidak 404 saat refresh
 const routes = {
     '/': 'home',
     '/pdf-tools': 'pdf-tools',
@@ -37,30 +37,38 @@ const routes = {
     '/unit-converter': 'unit-converter'
 };
 
+// Navigasi manual via Script
+function navigateTo(url) {
+    // Ubah hash, ini akan memicu event 'hashchange'
+    window.location.hash = url;
+}
+
+// Handler utama routing
 function handleRoute() {
     // Ambil hash, hilangkan tanda #. Default ke '/' jika kosong
+    // Contoh: #/pdf-merger -> /pdf-merger
     let path = window.location.hash.slice(1) || '/';
     
-    // Handle query params jika ada (misal dari redirect 404 lama)
+    // Bersihkan query params jika ada (misal dari redirect)
     if (path.includes('?')) {
         path = path.split('?')[0];
     }
 
     const viewId = routes[path] || 'home';
     
-    // Transisi UI
+    // Transisi UI: Sembunyikan semua view
     document.querySelectorAll('.app-view, .tab-content').forEach(el => {
         el.classList.add('hidden');
         el.classList.remove('animate-fade-in-up');
     });
 
+    // Tampilkan view target
     const targetView = document.getElementById(viewId);
     if (targetView) {
         targetView.classList.remove('hidden');
-        // Reset scroll position
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0); // Reset scroll ke atas
         
-        // Trigger animasi sedikit delay agar smooth
+        // Trigger animasi masuk
         setTimeout(() => {
             targetView.classList.add('animate-fade-in-up');
         }, 10);
@@ -71,7 +79,7 @@ function handleRoute() {
         document.getElementById('home').classList.remove('hidden');
     }
 
-    // Update Title
+    // Update Meta Title (UX)
     const title = viewId === 'home' ? 'Home' : viewId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     document.title = `SilentSuite | ${title}`;
     
@@ -81,14 +89,15 @@ function handleRoute() {
 
 // --- 3. EVENT LISTENERS & INIT ---
 document.addEventListener('DOMContentLoaded', () => {
-    // A. Routing Listeners (Hash Change)
+    // A. Routing Listeners (Hash Change & Load)
+    // Ini inti dari perbaikan Masalah 1
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('load', handleRoute);
 
-    // B. Setup UI Helpers
+    // B. Setup Global UI Helpers
     setupDragDrop();
     setupRangeSliders();
-    setupFilePreviews(); // New: Auto Preview Logic
+    setupFilePreviews(); // Fitur Baru: Auto Preview
     
     // C. Register Service Worker
     if ('serviceWorker' in navigator) {
@@ -105,6 +114,7 @@ window.toggleMobileMenu = function() {
 };
 
 // --- 4. NEW FEATURE: AUTOMATED FILE PREVIEW ---
+// Solusi Masalah 3: File Upload Tidak Terlihat
 function setupFilePreviews() {
     // Mapping ID Input -> ID Container Preview
     const previewMap = {
@@ -131,7 +141,7 @@ function setupFilePreviews() {
 }
 
 function renderPreview(files, container) {
-    container.innerHTML = ''; // Clear previous
+    container.innerHTML = ''; // Reset preview lama
     container.classList.remove('hidden');
     
     if (files.length === 0) {
@@ -149,6 +159,7 @@ function renderPreview(files, container) {
         let iconHtml = '';
         if (isImage) {
             const url = URL.createObjectURL(file);
+            // Gunakan onload untuk revoke URL agar tidak memory leak
             iconHtml = `<img src="${url}" class="file-thumb" onload="URL.revokeObjectURL(this.src)">`;
         } else if (file.type.includes('pdf')) {
             iconHtml = `<div class="file-icon-placeholder text-red-500 bg-red-50 border-red-100"><i class="fa-solid fa-file-pdf"></i></div>`;
@@ -185,6 +196,7 @@ function setupDragDrop() {
             zone.addEventListener(eventName, preventDefaults, false);
         });
 
+        // Efek visual saat drag
         ['dragenter', 'dragover'].forEach(eventName => {
             zone.addEventListener(eventName, () => {
                 zone.classList.add('border-brand-500', 'bg-brand-50');
@@ -199,11 +211,13 @@ function setupDragDrop() {
             }, false);
         });
 
+        // Handle File Drop
         zone.addEventListener('drop', (e) => {
             const dt = e.dataTransfer;
             const files = dt.files;
             if (input) {
                 input.files = files;
+                // Trigger change event manual agar preview muncul
                 const event = new Event('change', { bubbles: true });
                 input.dispatchEvent(event);
             }
@@ -231,13 +245,14 @@ function setupRangeSliders() {
 // ==========================================
 
 // --- PDF MERGER (Custom Queue Logic) ---
+// Merger punya logika preview sendiri (bisa hapus per item)
 const mergeInput = document.getElementById('mergeInput');
 if (mergeInput) {
     mergeInput.addEventListener('change', (e) => {
         const newFiles = Array.from(e.target.files);
         STATE.pdfMergeQueue = [...STATE.pdfMergeQueue, ...newFiles];
         renderMergeQueue();
-        e.target.value = ''; // Reset allow re-select
+        e.target.value = ''; // Reset agar bisa pilih file yang sama lagi
     });
 }
 
@@ -254,6 +269,7 @@ function renderMergeQueue() {
 
     STATE.pdfMergeQueue.forEach((file, index) => {
         const div = document.createElement('div');
+        // Gunakan style class baru agar konsisten
         div.className = 'file-preview-item animate-fade-in group';
         div.innerHTML = `
             <div class="file-preview-info">
