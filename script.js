@@ -475,7 +475,6 @@ window.processVideoCompress = function() {
     alert("Sedang dalam pengembangan untuk performa WebAssembly yang lebih ringan.");
 };
 
-// --- IMAGE COMPRESSOR ---
 window.compressImage = async function() {
     const input = document.getElementById('imageInput');
     const sizeVal = document.getElementById('compressSizeVal').value;
@@ -494,14 +493,40 @@ window.compressImage = async function() {
         let targetSizeMB = parseFloat(sizeVal);
         if (unit === 'KB') targetSizeMB = targetSizeMB / 1024;
 
-        const options = {
-            maxSizeMB: targetSizeMB,
-            maxWidthOrHeight: 1920,
-            useWebWorker: true
-        };
+        const targetBytes = targetSizeMB * 1024 * 1024;
+        const tolerance = targetBytes * 0.08;
 
-        const compressedFile = await imageCompression(file, options);
-        
+        let minQ = 0.1;
+        let maxQ = 1.0;
+        let bestFile = null;
+
+        for (let i = 0; i < 8; i++) {
+            const midQ = (minQ + maxQ) / 2;
+
+            const compressed = await imageCompression(file, {
+                maxSizeMB: undefined,
+                useWebWorker: true,
+                initialQuality: midQ
+            });
+
+            if (!bestFile || Math.abs(compressed.size - targetBytes) < Math.abs(bestFile.size - targetBytes)) {
+                bestFile = compressed;
+            }
+
+            if (Math.abs(compressed.size - targetBytes) <= tolerance) {
+                bestFile = compressed;
+                break;
+            }
+
+            if (compressed.size > targetBytes) {
+                maxQ = midQ;
+            } else {
+                minQ = midQ;
+            }
+        }
+
+        const compressedFile = bestFile;
+
         resultBox.innerHTML = `
             <div class="text-center">
                 <p class="text-sm text-slate-500 mb-2">Original: ${(file.size/1024).toFixed(1)}KB -> <b>${(compressedFile.size/1024).toFixed(1)}KB</b></p>
