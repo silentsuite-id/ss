@@ -141,15 +141,16 @@ Tanpa login, tanpa biaya, dan privasi terjaga penuh.
                 </p>
                 
                 <div class="flex flex-col sm:flex-row justify-center gap-4 mb-20">
-                    <a href="#/pdf-tools" class="route-link group px-8 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-full transition shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2">
-                        <span>Mulai Sekarang</span>
-                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                    </a>
+    <a href="#/select-menu" class="route-link group px-8 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-full transition shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2">
+        <span>Mulai Sekarang</span>
+        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+    </a>
 
-                    <button onclick="document.getElementById('footer-list').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold rounded-full transition shadow-sm flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-play text-brand-600"></i> Lihat Fitur
-                    </button>
-                </div>
+    <button onclick="document.getElementById('footer-list').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold rounded-full transition shadow-sm flex items-center justify-center gap-2">
+        <i class="fa-solid fa-play text-brand-600"></i> Lihat Fitur
+    </button>
+</div>
+
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
                     <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-card hover:shadow-card-hover transition duration-300 group">
@@ -176,6 +177,60 @@ Tanpa login, tanpa biaya, dan privasi terjaga penuh.
                 </div>
             </div>
         </section>
+        <section id="select-menu" class="app-view hidden animate-fade-in-up">
+    <button onclick="window.location.hash='/'" class="btn-back">
+        <i class="fa-solid fa-arrow-left"></i> Kembali ke Home
+    </button>
+
+    <div class="mb-10 text-center">
+        <h2 class="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Pilih Kategori Alat</h2>
+        <p class="text-slate-600">Silakan pilih kategori alat yang ingin Anda gunakan.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <a href="#/pdf-tools" class="route-link group bg-white p-8 rounded-3xl border border-slate-200 shadow-card hover:shadow-card-hover hover:border-red-200 transition duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full -mr-8 -mt-8 transition group-hover:bg-red-100"></div>
+            <div class="relative z-10">
+                <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition border border-red-100 text-red-600 shadow-sm">
+                    <i class="fa-solid fa-file-pdf text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-2 group-hover:text-red-600 transition">PDF Tools</h3>
+                <p class="text-slate-500 mb-6 leading-relaxed">Gabung, Pisahkan, dan Konversi dokumen PDF Anda dengan aman.</p>
+                <span class="inline-flex items-center text-sm font-bold text-red-600 group-hover:gap-2 transition-all">
+                    Buka Alat <i class="fa-solid fa-arrow-right ml-2"></i>
+                </span>
+            </div>
+        </a>
+
+        <a href="#/media-tools" class="route-link group bg-white p-8 rounded-3xl border border-slate-200 shadow-card hover:shadow-card-hover hover:border-purple-200 transition duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-purple-50 rounded-bl-full -mr-8 -mt-8 transition group-hover:bg-purple-100"></div>
+            <div class="relative z-10">
+                <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition border border-purple-100 text-purple-600 shadow-sm">
+                    <i class="fa-solid fa-photo-film text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-2 group-hover:text-purple-600 transition">Media Tools</h3>
+                <p class="text-slate-500 mb-6 leading-relaxed">Kompres Video, Ekstrak Audio, dan Konversi format Gambar.</p>
+                <span class="inline-flex items-center text-sm font-bold text-purple-600 group-hover:gap-2 transition-all">
+                    Buka Alat <i class="fa-solid fa-arrow-right ml-2"></i>
+                </span>
+            </div>
+        </a>
+
+        <a href="#/utilities" class="route-link group bg-white p-8 rounded-3xl border border-slate-200 shadow-card hover:shadow-card-hover hover:border-blue-200 transition duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -mr-8 -mt-8 transition group-hover:bg-blue-100"></div>
+            <div class="relative z-10">
+                <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition border border-blue-100 text-blue-600 shadow-sm">
+                    <i class="fa-solid fa-sliders text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition">Utilities</h3>
+                <p class="text-slate-500 mb-6 leading-relaxed">QR Code Maker, Password Generator, dan Konversi Unit.</p>
+                <span class="inline-flex items-center text-sm font-bold text-blue-600 group-hover:gap-2 transition-all">
+                    Buka Alat <i class="fa-solid fa-arrow-right ml-2"></i>
+                </span>
+            </div>
+        </a>
+    </div>
+</section>
         <section id="pdf-tools" class="app-view hidden animate-fade-in-up">
             <button onclick="window.location.hash='/'" class="btn-back">
                 <i class="fa-solid fa-arrow-left"></i> Kembali
@@ -584,17 +639,21 @@ Tanpa login, tanpa biaya, dan privasi terjaga penuh.
                 </div>
 
                 <div class="space-y-6">
-                    <div>
-                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Isi Konten QR</label>
-                        <input type="text" id="qrInput" placeholder="Masukkan Link Website / Teks / WiFi" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-4 text-slate-900 outline-none focus:border-slate-500 transition">
-                    </div>
+    <div>
+        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Isi Konten QR</label>
+        <input type="text" id="qrInput" placeholder="Masukkan Link Website / Teks / WiFi" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-4 text-slate-900 outline-none focus:border-slate-500 transition">
+    </div>
 
-                    <button onclick="generateQR()" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition">Generate QR Code</button>
-                    
-                    <div id="qrResult" class="mt-8 flex justify-center bg-white rounded-xl p-6 hidden border border-slate-200 w-fit mx-auto shadow-sm"></div>
-                    <p class="text-center text-xs text-slate-400 mt-2 hidden" id="qrHint">*Klik kanan / Tahan gambar untuk simpan</p>
-                </div>
-            </div>
+    <button onclick="generateQR()" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition">Generate QR Code</button>
+    
+    <div class="flex flex-col items-center gap-4 mt-8">
+        <div id="qrResult" class="bg-white rounded-xl p-6 hidden border border-slate-200 shadow-sm"></div>
+        
+        <button id="qrDownloadBtn" onclick="downloadQR()" class="hidden px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-lg shadow-md transition items-center gap-2">
+            <i class="fa-solid fa-download"></i> Download QR Image
+        </button>
+    </div>
+    </div>
         </section>
 
         <section id="password-generator" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">

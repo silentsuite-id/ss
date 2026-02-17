@@ -18,6 +18,7 @@ if (window.pdfjsLib) {
 // Solusi aman untuk GitHub Pages agar tidak 404 saat refresh
 const routes = {
     '/': 'home',
+    '/select-menu': 'select-menu',
     '/pdf-tools': 'pdf-tools',
     '/media-tools': 'media-tools',
     '/utilities': 'utilities',
@@ -98,6 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setupDragDrop();
     setupRangeSliders();
     setupFilePreviews(); // Fitur Baru: Auto Preview
+
+    if(document.getElementById('unitCat')) {
+        updateUnitOptions(); // Inisialisasi dropdown converter biar gak kosong
+    }
+
     
     // C. Register Service Worker
     if ('serviceWorker' in navigator) {
@@ -634,21 +640,56 @@ window.generateMeme = function() {
 // ==========================================
 
 window.generateQR = function() {
+    // 1. Setup Variable
     const text = document.getElementById('qrInput').value;
     const container = document.getElementById('qrResult');
-    const hint = document.getElementById('qrHint');
+    const downloadBtn = document.getElementById('qrDownloadBtn');
     
+    // 2. Cek Input Kosong
     if (!text) return alert("Masukkan teks atau link!");
     
+    // 3. (OPTIMASI) Sembunyikan tombol download dulu!
+    // Biar user gak download pas lagi proses generate
+    downloadBtn.classList.add('hidden'); 
+    
+    // 4. Bersihin container lama
     container.innerHTML = "";
     container.classList.remove('hidden');
-    hint.classList.remove('hidden');
     
+    // 5. Generate QR Baru
     new QRCode(container, {
-        text: text, width: 200, height: 200,
-        colorDark : "#000000", colorLight : "#ffffff",
+        text: text, 
+        width: 200, 
+        height: 200,
+        colorDark : "#000000", 
+        colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
     });
+
+    // 6. Munculin Tombol Download (Baru sekarang dimunculin!)
+    // Kasih sedikit delay (opsional) biar mulus, atau langsung juga oke
+    setTimeout(() => {
+        downloadBtn.classList.remove('hidden');
+        downloadBtn.classList.add('inline-flex');
+    }, 100); // Delay 0.1 detik biar pas render
+};
+
+// NEW FUNCTION: Download Logic
+window.downloadQR = function() {
+    const container = document.getElementById('qrResult');
+    const img = container.querySelector('img');
+
+    if (img && img.src) {
+        // Create a temporary link to trigger download
+        const link = document.createElement('a');
+        link.href = img.src;
+        link.download = 'qrcode-silentsuite.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } else {
+        alert("QR Code belum siap untuk didownload. Silakan coba lagi.");
+    }
 };
 
 window.generatePass = function() {
