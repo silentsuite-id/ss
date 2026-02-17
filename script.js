@@ -677,37 +677,43 @@ window.generateQR = function() {
 // NEW FUNCTION: Download Logic
 window.downloadQR = function() {
     const container = document.getElementById('qrResult');
-    
-    // 1. CARI ELEMENT: Cek apakah library bikin <img> atau <canvas>
-    // Ini kuncinya! Kita cari dua-duanya.
-    const img = container.querySelector('img');
     const canvas = container.querySelector('canvas');
+    const img = container.querySelector('img');
 
-    let url = null;
-
-    // 2. LOGIC DETEKSI & KONVERSI
-    if (img && img.src) {
-        // Kalau ketemu gambar langsung (biasanya di HP lama)
-        url = img.src;
-    } else if (canvas) {
-        // Kalau ketemunya canvas (ini yang kejadian di HP lu sekarang)
-        // Kita "foto" kanvasnya biar jadi data gambar PNG
-        url = canvas.toDataURL("image/png");
-    }
-
-    // 3. EKSEKUSI DOWNLOAD
-    if (url) {
+    // 1. PRIORITAS UTAMA: CANVAS (Kualitas Paling Tinggi)
+    if (canvas) {
+        // Cara paling aman & valid buat HP: toBlob
+        canvas.toBlob(function(blob) {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'SilentSuite-QR-' + Date.now() + '.png';
+            document.body.appendChild(link);
+            link.click();
+            
+            // Bersihin memori setelah download
+            setTimeout(() => {
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }, 100);
+        }, 'image/png');
+        
+    } 
+    // 2. FALLBACK: IMAGE (Buat browser jadul banget)
+    else if (img && img.src) {
         const link = document.createElement('a');
-        link.href = url;
-        link.download = 'qrcode-silentsuite.png';
+        link.href = img.src;
+        link.download = 'SilentSuite-QR-' + Date.now() + '.png';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    } else {
-        // Kalau bener-bener gak ada dua-duanya
-        alert("Gagal mengambil data gambar. Coba generate ulang.");
+    } 
+    // 3. GAGAL TOTAL
+    else {
+        alert("Gagal memproses gambar. Coba generate ulang.");
     }
 };
+
 
 window.copyPass = function() {
     const el = document.getElementById("passResult");
