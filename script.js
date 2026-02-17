@@ -677,29 +677,36 @@ window.generateQR = function() {
 // NEW FUNCTION: Download Logic
 window.downloadQR = function() {
     const container = document.getElementById('qrResult');
+    
+    // 1. CARI ELEMENT: Cek apakah library bikin <img> atau <canvas>
+    // Ini kuncinya! Kita cari dua-duanya.
     const img = container.querySelector('img');
+    const canvas = container.querySelector('canvas');
 
+    let url = null;
+
+    // 2. LOGIC DETEKSI & KONVERSI
     if (img && img.src) {
-        // Create a temporary link to trigger download
+        // Kalau ketemu gambar langsung (biasanya di HP lama)
+        url = img.src;
+    } else if (canvas) {
+        // Kalau ketemunya canvas (ini yang kejadian di HP lu sekarang)
+        // Kita "foto" kanvasnya biar jadi data gambar PNG
+        url = canvas.toDataURL("image/png");
+    }
+
+    // 3. EKSEKUSI DOWNLOAD
+    if (url) {
         const link = document.createElement('a');
-        link.href = img.src;
+        link.href = url;
         link.download = 'qrcode-silentsuite.png';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     } else {
-        alert("QR Code belum siap untuk didownload. Silakan coba lagi.");
+        // Kalau bener-bener gak ada dua-duanya
+        alert("Gagal mengambil data gambar. Coba generate ulang.");
     }
-};
-
-window.generatePass = function() {
-    const length = document.getElementById('passLength').value;
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
-    let retVal = "";
-    for (let i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
-    }
-    document.getElementById('passResult').value = retVal;
 };
 
 window.copyPass = function() {
