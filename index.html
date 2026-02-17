@@ -656,7 +656,7 @@ Tanpa login, tanpa biaya, dan privasi terjaga penuh.
     </div>
         </section>
 
-        <section id="password-generator" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
+                <section id="password-generator" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
             <a href="#/utilities" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
                 <i class="fa-solid fa-arrow-left"></i> Kembali ke Utils
             </a>
@@ -672,7 +672,7 @@ Tanpa login, tanpa biaya, dan privasi terjaga penuh.
 
                 <div class="space-y-6">
                     <div class="relative">
-                        <input type="text" id="passResult" readonly class="w-full bg-slate-50 border border-slate-300 rounded-xl p-5 text-brand-600 font-mono text-xl md:text-2xl text-center tracking-widest outline-none font-bold">
+                        <input type="text" id="passResult" readonly class="w-full bg-slate-50 border border-slate-300 rounded-xl p-5 text-brand-600 font-mono text-xl md:text-2xl text-center tracking-widest outline-none font-bold transition-colors">
                         <button onclick="copyPass()" class="absolute right-3 top-3 bottom-3 px-4 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-500 transition active:scale-95 shadow-sm tooltip" title="Copy">
                             <i class="fa-regular fa-copy"></i>
                         </button>
@@ -681,17 +681,35 @@ Tanpa login, tanpa biaya, dan privasi terjaga penuh.
                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
                         <div class="flex justify-between text-sm text-slate-600 font-bold mb-4">
                             <span>Panjang Password: <span id="lenVal" class="text-brand-600 text-lg">16</span></span>
-                            <span>Karakter Acak</span>
+                            <span>Karakter</span>
                         </div>
-                        <input type="range" id="passLength" min="8" max="50" value="16" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-600">
+                        <input type="range" id="passLength" min="8" max="64" value="16" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-600">
                     </div>
 
-                    <button onclick="generatePass()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-md transition shadow-brand-500/20">
-                        <i class="fa-solid fa-rotate mr-2"></i> Buat Password Baru
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <label class="flex items-center space-x-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition select-none">
+                            <input type="checkbox" id="passUpper" checked class="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 accent-brand-600">
+                            <span class="text-slate-700 font-bold text-sm">Huruf Besar</span>
+                        </label>
+                        
+                        <label class="flex items-center space-x-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition select-none">
+                            <input type="checkbox" id="passNumber" checked class="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 accent-brand-600">
+                            <span class="text-slate-700 font-bold text-sm">Angka (0-9)</span>
+                        </label>
+                        
+                        <label class="flex items-center space-x-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition select-none">
+                            <input type="checkbox" id="passSymbol" class="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 accent-brand-600">
+                            <span class="text-slate-700 font-bold text-sm">Simbol (!@#)</span>
+                        </label>
+                    </div>
+
+                    <button onclick="generatePassword()" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-lg shadow-brand-500/20 transition active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate"></i> Buat Password Baru
                     </button>
                 </div>
             </div>
         </section>
+
 
         <section id="unit-converter" class="app-view hidden animate-fade-in-up max-w-3xl mx-auto">
             <a href="#/utilities" class="route-link inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 mb-6 text-sm font-semibold transition">
