@@ -714,6 +714,47 @@ window.downloadQR = function() {
     }
 };
 
+window.generatePassword = function() {
+    const length = parseInt(document.getElementById('passLength').value);
+    const includeUppercase = document.getElementById('passUpper').checked;
+    const includeNumbers = document.getElementById('passNumber').checked;
+    const includeSymbols = document.getElementById('passSymbol').checked;
+    const resultEl = document.getElementById('passResult');
+
+    const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+    const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numberChars = '0123456789';
+    const symbolChars = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+
+    let charSet = lowercaseChars;
+    if (includeUppercase) charSet += uppercaseChars;
+    if (includeNumbers) charSet += numberChars;
+    if (includeSymbols) charSet += symbolChars;
+
+    // --- BAGIAN PENTING (CRYPTO) ---
+    // 1. Buat wadah (array) untuk menampung angka acak
+    // Uint32Array artinya kita minta angka integer 32-bit (angka besar)
+    const randomValues = new Uint32Array(length);
+    
+    // 2. Isi wadah tersebut dengan angka acak dari OS
+    window.crypto.getRandomValues(randomValues);
+
+    let password = '';
+    for (let i = 0; i < length; i++) {
+        // 3. Ambil angka acak dari array tadi
+        // Gunakan modulus (%) untuk memastikan index tidak melebihi panjang charSet
+        const randomIndex = randomValues[i] % charSet.length;
+        password += charSet[randomIndex];
+    }
+    // -------------------------------
+
+    resultEl.value = password;
+    
+    // Trigger animasi update (opsional)
+    resultEl.classList.add('bg-brand-50');
+    setTimeout(() => resultEl.classList.remove('bg-brand-50'), 200);
+};
+
 
 window.copyPass = function() {
     const el = document.getElementById("passResult");
