@@ -18,7 +18,6 @@ if (window.pdfjsLib) {
 // Solusi aman untuk GitHub Pages agar tidak 404 saat refresh
 const routes = {
     '/': 'home',
-    '/select-menu': 'select-menu',
     '/pdf-tools': 'pdf-tools',
     '/media-tools': 'media-tools',
     '/utilities': 'utilities',
@@ -637,56 +636,27 @@ window.generateMeme = function() {
 window.generateQR = function() {
     const text = document.getElementById('qrInput').value;
     const container = document.getElementById('qrResult');
-    const downloadBtn = document.getElementById('qrDownloadBtn'); // <-- Update
+    const hint = document.getElementById('qrHint');
     
     if (!text) return alert("Masukkan teks atau link!");
     
     container.innerHTML = "";
     container.classList.remove('hidden');
+    hint.classList.remove('hidden');
     
-    // Generate QR
     new QRCode(container, {
-        text: text, 
-        width: 200, 
-        height: 200,
-        colorDark : "#000000", 
-        colorLight : "#ffffff",
+        text: text, width: 200, height: 200,
+        colorDark : "#000000", colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
     });
-
-    // Tampilkan tombol download setelah QR jadi
-    setTimeout(() => {
-        downloadBtn.classList.remove('hidden');
-    }, 100);
-};
-
-// --- FUNGSI BARU: DOWNLOAD QR ---
-window.downloadQR = function() {
-    const container = document.getElementById('qrResult');
-    const img = container.querySelector('img'); // Ambil gambar hasil generate
-    
-    if (img && img.src) {
-        // Gunakan helper downloadBlob yang sudah ada, atau buat link manual
-        const link = document.createElement('a');
-        link.href = img.src;
-        link.download = 'SilentSuite-QR.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    } else {
-        alert("Gagal mengambil gambar QR. Coba generate ulang.");
-    }
 };
 
 window.generatePass = function() {
     const length = document.getElementById('passLength').value;
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
     let retVal = "";
-    const values = new Uint32Array(length);
-    window.crypto.getRandomValues(values);
-    
-    for (let i = 0; i < length; i++) {
-        retVal += charset[values[i] % charset.length];
+    for (let i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
     }
     document.getElementById('passResult').value = retVal;
 };

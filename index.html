@@ -141,11 +141,10 @@ Tanpa login, tanpa biaya, dan privasi terjaga penuh.
                 </p>
                 
                 <div class="flex flex-col sm:flex-row justify-center gap-4 mb-20">
-                    <a href="#/select-menu" class="route-link group px-8 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-full transition shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2">
-    <span>Mulai Sekarang</span>
-    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-</a>
-
+                    <a href="#/pdf-tools" class="route-link group px-8 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-full transition shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2">
+                        <span>Mulai Sekarang</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
 
                     <button onclick="document.getElementById('footer-list').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold rounded-full transition shadow-sm flex items-center justify-center gap-2">
                         <i class="fa-solid fa-play text-brand-600"></i> Lihat Fitur
@@ -177,78 +176,6 @@ Tanpa login, tanpa biaya, dan privasi terjaga penuh.
                 </div>
             </div>
         </section>
-        <section id="select-menu" class="app-view hidden animate-fade-in-up">
-    
-    <button onclick="window.location.hash='/'" class="btn-back mb-8">
-        <i class="fa-solid fa-arrow-left"></i> Kembali ke Home
-    </button>
-
-    <div class="text-center max-w-2xl mx-auto mb-12">
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Pilih Kebutuhan Anda</h2>
-        <p class="text-slate-600 text-lg">Silakan pilih kategori alat yang ingin Anda gunakan.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-        
-        <a href="#/pdf-tools" class="route-link group bg-white p-8 rounded-3xl border border-slate-200 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col h-full">
-            <div class="absolute -right-4 -top-4 opacity-[0.07] group-hover:opacity-10 transition">
-                <i class="fa-solid fa-file-pdf text-[150px] text-red-600"></i>
-            </div>
-            
-            <div class="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition border border-red-100 shadow-sm">
-                <i class="fa-solid fa-layer-group text-red-600 text-3xl"></i>
-            </div>
-            
-            <h3 class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-red-600 transition">PDF Tools</h3>
-            <p class="text-slate-500 mb-8 flex-grow">Gabungkan file, pisahkan halaman, atau ubah gambar menjadi PDF.</p>
-            
-            <div class="mt-auto">
-                <span class="inline-flex items-center gap-2 text-red-600 font-bold bg-red-50 px-4 py-2 rounded-full text-sm group-hover:bg-red-600 group-hover:text-white transition-colors">
-                    Buka Menu <i class="fa-solid fa-arrow-right"></i>
-                </span>
-            </div>
-        </a>
-
-        <a href="#/media-tools" class="route-link group bg-white p-8 rounded-3xl border border-slate-200 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col h-full">
-            <div class="absolute -right-4 -top-4 opacity-[0.07] group-hover:opacity-10 transition">
-                <i class="fa-solid fa-clapperboard text-[150px] text-purple-600"></i>
-            </div>
-
-            <div class="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition border border-purple-100 shadow-sm">
-                <i class="fa-solid fa-wand-magic-sparkles text-purple-600 text-3xl"></i>
-            </div>
-            
-            <h3 class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-purple-600 transition">Media Tools</h3>
-            <p class="text-slate-500 mb-8 flex-grow">Kompres video, ekstrak audio MP3, konversi format gambar, & meme generator.</p>
-            
-            <div class="mt-auto">
-                <span class="inline-flex items-center gap-2 text-purple-600 font-bold bg-purple-50 px-4 py-2 rounded-full text-sm group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                    Buka Menu <i class="fa-solid fa-arrow-right"></i>
-                </span>
-            </div>
-        </a>
-
-        <a href="#/utilities" class="route-link group bg-white p-8 rounded-3xl border border-slate-200 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col h-full">
-            <div class="absolute -right-4 -top-4 opacity-[0.07] group-hover:opacity-10 transition">
-                <i class="fa-solid fa-toolbox text-[150px] text-slate-600"></i>
-            </div>
-
-            <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition border border-slate-200 shadow-sm">
-                <i class="fa-solid fa-sliders text-slate-700 text-3xl"></i>
-            </div>
-            
-            <h3 class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-slate-700 transition">Utilities</h3>
-            <p class="text-slate-500 mb-8 flex-grow">QR Code Maker, Password Generator aman, dan Konversi Unit.</p>
-            
-            <div class="mt-auto">
-                <span class="inline-flex items-center gap-2 text-slate-700 font-bold bg-slate-100 px-4 py-2 rounded-full text-sm group-hover:bg-slate-800 group-hover:text-white transition-colors">
-                    Buka Menu <i class="fa-solid fa-arrow-right"></i>
-                </span>
-            </div>
-        </a>
-
-    </div>
-</section>
         <section id="pdf-tools" class="app-view hidden animate-fade-in-up">
             <button onclick="window.location.hash='/'" class="btn-back">
                 <i class="fa-solid fa-arrow-left"></i> Kembali
@@ -665,11 +592,7 @@ Tanpa login, tanpa biaya, dan privasi terjaga penuh.
                     <button onclick="generateQR()" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition">Generate QR Code</button>
                     
                     <div id="qrResult" class="mt-8 flex justify-center bg-white rounded-xl p-6 hidden border border-slate-200 w-fit mx-auto shadow-sm"></div>
-                    <div id="qrResult" class="mt-8 flex justify-center bg-white rounded-xl p-6 hidden border border-slate-200 w-fit mx-auto shadow-sm"></div>
-
-<button id="qrDownloadBtn" onclick="downloadQR()" class="hidden w-full mt-4 py-3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl transition flex items-center justify-center gap-2">
-    <i class="fa-solid fa-download"></i> Download QR Image
-</button>
+                    <p class="text-center text-xs text-slate-400 mt-2 hidden" id="qrHint">*Klik kanan / Tahan gambar untuk simpan</p>
                 </div>
             </div>
         </section>
